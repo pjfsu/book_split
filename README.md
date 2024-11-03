@@ -115,7 +115,7 @@ printf 'Invalid chapter "%s", because from=%i is greater than to=%i or to=%i is 
 
 The next example was run using Debian 12.
 
-```console
+```shell
 user@debian:~/Documents/programs/split_book$ ls example/
 lorem_book.odt  lorem_book.pdf  lorem_chapters.xml
 user@debian:~/Documents/programs/split_book$ bash split_book.sh example/lorem_book.pdf example/lorem_chapters.xml 
