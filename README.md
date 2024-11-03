@@ -107,7 +107,7 @@ __NOTE:__ PDFBox by default appends the string "_-1.pdf_" to _-outputPrefix_ val
 For each _\<chapter>_ tag such as not(_FROM_ <= _TO_ <= _PAGES_), the next command is generated: 
 
 ```
-printf 'Invalid chapter "%s", because from=%i is greater than to=%i or to=%i is greater than pages=%i\n' \
+printf 'invalid chapter "%s", because from=%i is greater than to=%i or to=%i is greater than pages=%i\n' \
  "NAME" "FROM" "TO" "TO" "PAGES"
 ```
 
