@@ -1,3 +1,7 @@
+# Ignore tar.gz files:
 **/*tar.gz
-.*
-!/.gitignore
+
+# Ignore vim files:
+*~
+*.swp
+*.swo
