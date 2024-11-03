@@ -1,4 +1,4 @@
-# split_book tests
+# split_book.sh exit codes tests
 
 fail_because_args_length_is_not_two()
 {
