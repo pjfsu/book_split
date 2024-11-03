@@ -289,7 +289,7 @@ This project uses a number of commands to work properly:
 This project uses a number of JAR ("Java archive") files to work properly:
 
 |Project|Website|Description|Version|License|Download|
-|---|---|---|---|---|
+|---|---|---|---|---|---|
 |Apache PDFBox|https://pdfbox.apache.org/|Apache PDFBox is an open source tool for working with PDF documents in Java. It offers features such as text extraction, splitting, merging, form filling, signing, printing and more.|3.0.3|Apache License 2.0|https://dlcdn.apache.org/pdfbox/3.0.3/pdfbox-app-3.0.3.jar|
 |Apache Xalan|https://xalan.apache.org/|The Apache Xalan Project develops and maintains libraries and programs that transform XML documents using XSLT standard stylesheets.|2.7.3|Apache License 2.0|https://dlcdn.apache.org/xalan/xalan-j/binaries/xalan-j_2_7_3-bin.tar.gz|
 |Apache Xerces|https://xerces.apache.org/|Apache Xerces Project develops XML parsers and components in C++, Java, Perl and other languages. It supports XML 1.0, 1.1, XML Schema, XInclude, XML Catalogs and more standards and APIs|2.12.2|Apache License 2.0|https://dlcdn.apache.org//xerces/j/binaries/Xerces-J-bin.2.12.2.tar.gz|
