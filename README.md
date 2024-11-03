@@ -68,7 +68,7 @@ Some invalid chapters XML files (taken from _tests/_ directory):
 
 Config XML file has the next format (see _config/config.xsd_ file for more info):
 
-```xml
+```
 <split_book 
  pdfbox_app_jar="PDFBOX_APP_JAR" 
  outdir="OUTDIR">
