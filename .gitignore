@@ -8,12 +8,14 @@
 
 # Ignore xerces files except jars, LICENSEs and NOTICEs
 xerces/xerces-2_12_2/*
+xerces/xerces-2_12_2/**
 !xerces/xerces-2_12_2/*.jar
 !xerces/xerces-2_12_2/LICENSE*
 !xerces/xerces-2_12_2/NOTICE*
 
 # Ignore xalan files except jars, LICENSEs and NOTICEs
 xalan/xalan-j_2_7_3/*
+xalan/xalan-j_2_7_3/**
 !xalan/xalan-j_2_7_3/*.jar
 !xalan/xalan-j_2_7_3/LICENSE*
 !xalan/xalan-j_2_7_3/NOTICE*
