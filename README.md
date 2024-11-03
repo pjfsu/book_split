@@ -92,7 +92,7 @@ Where:
 For each _\<chapter>_ tag such as _FROM_ <= _TO_ <= _PAGES_, the next command is generated: 
 
 ```
-printf 'splitting chapter "%s" ... ' "NAME"
+printf 'generating "%s.pdf" ... ' "NAME"
 java -jar "PDFBOX_APP_JAR" split \
  -startPage=FROM \
  -endPage=TO \
