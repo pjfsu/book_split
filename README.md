@@ -28,13 +28,13 @@ Sometimes I want to split a book (PDF file) into chapters, but if the book is _l
 |config/|it contains _config_ XSD 1.0 and _config_ XSL 1.0 files|
 |diagram/|it contains _Diagram_ PNG file and drawio file (edited using _drawio-desktop_ AppImage, downloaded from https://github.com/jgraph/drawio-desktop/releases)|
 |example/|it contains a PDF file with "Lorem ipsum dolor ..." phrases (exported from _example/lorem.odt_ using LibreOffice Writer) and a XML file with chapters (see [_Example_](#example) section)|
-|gpl-3.0.txt|it contains the GNU General Public License Version 3 in plain text (downloaded from https://www.gnu.org/licenses/gpl-3.0.txt)|
 |pdfbox/|it contains PDFBox app jar (see [_Dependencies_](#dependencies) section), used to split the book|
-|README\.md|it is this file (I used _mdview_ AppImage, downloaded from https://github.com/c3er/mdview/releases, to display it while I was editing it)|
-|split_book.sh|it contains _main()_ function|
-|tests/|it containts _test/test.sh_ to test all the exit codes of main script _split_book.sh_ (see [_Exit Codes_](#exit-codes) section)|
+|test/|it containts _test/test.sh_ to test all the exit codes of main script _split_book.sh_ (see [_Exit Codes_](#exit-codes) section)|
 |xalan/|it contains Xalan jars (see [_Dependencies_](#dependencies) section), used to transform _config.xml_ to _pdfbox\.sh_ using _config.xsl_|
 |xerces/|it contains Xerces jars (see [_Dependencies_](#dependencies) section), used to validate _config.xml_ against _config.xsl_|
+|README\.md|it is this file (I used _mdview_ AppImage, downloaded from https://github.com/c3er/mdview/releases, to display it while I was editing it)|
+|gpl-3.0.txt|it contains the GNU General Public License Version 3 in plain text (downloaded from https://www.gnu.org/licenses/gpl-3.0.txt)|
+|split_book.sh|it contains _main()_ function|
 
 ## Chapters XML
 
