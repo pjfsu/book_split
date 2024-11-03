@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+<xs:element name="split_book">
+<xs:complexType>
+<xs:sequence>
+	<xs:element name="book" maxOccurs="1">
+	<xs:complexType>
+	<xs:sequence>
+		<xs:element name="chapters" maxOccurs="1">
+		<xs:complexType>
+		<xs:sequence>
+			<xs:element name="chapter" minOccurs="1" maxOccurs="unbounded">
+			<xs:complexType>
+				<!-- chapter attributes -->
+				<xs:attribute name="from" type="xs:positiveInteger" use="required"/>
+				<xs:attribute name="to" type="xs:positiveInteger" use="required"/>
+				<xs:attribute name="name" use="required">
+					<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:minLength value="1"/>
+					</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		</xs:complexType>
+		</xs:element>
+	</xs:sequence>
+	<!-- book attributes -->
+	<xs:attribute name="name" type="xs:string" use="required"/>
+	<xs:attribute name="pages" type="xs:positiveInteger" use="required"/>
+	</xs:complexType>
+	</xs:element>
+</xs:sequence>
+<!-- root attributes -->
+<xs:attribute name="pdfbox_app_jar" type="xs:string" use="required"/>
+<xs:attribute name="outdir" type="xs:string" use="required"/>
+</xs:complexType>
+</xs:element>
+
+</xs:schema>
