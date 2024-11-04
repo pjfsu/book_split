@@ -13,7 +13,7 @@
 * [Dependencies](#dependencies)
 * [License](#license)
 * [Comments](#comments)
-* [Mistakes](#mistakes-%C2%AF%5C_(%E3%83%84)_%2F%C2%AF)
+* [Mistakes](#mistakes)
 
 ## Motivation
 
@@ -389,8 +389,9 @@ Optimized:       no
 PDF version:     1.5
 ```
 
-## Mistakes ¯\\\_(ツ)\_/¯
+## Mistakes
 
+During the development of this project, I made some mistakes ¯\\\_(ツ)\_/¯:
 1. I developed this project _offline_ without using git command.
 2. I don't know exactly, how long this project lasted, because I didn't write down the dates and times I developed this project. I seem to remember that I started this project around September 2024 third week, and I finished it on Octber 2024 last week, and I programmed two or three hours a day, so this project lasted around 70 hours (5 weeks, two hours) or 105 hours (5 weeks, three hours).
 
