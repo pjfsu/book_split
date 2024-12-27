@@ -25,16 +25,16 @@ check_args_length_is_two()
 	[ ${1} -eq 2 ] \
 		&& return 0
 
-	printf '[Error] expected two arguments, usage: "split_book.sh BOOK.pdf CHAPTERS.xml"\n' >&2
+	printf '[Error] expected two arguments, usage: "./split_book.sh PDF XML"\n' >&2
 	return 1
 }
 
 check_book_pdf_exists()
 {
 	# description
-	#	it checks if book pdf exists
+	#	it checks if pdf exists
 	# arguments
-	#	${1}:str, book pdf absolute or relative path
+	#	${1}:str, pdf absolute or relative path
 	# globals
 	#	none
 	# preconditions
@@ -46,7 +46,7 @@ check_book_pdf_exists()
 	[ -f "${1}" ] \
 		&& return 0
 
-	printf '[Error] not found book pdf "%s"\n' "${1}" >&2
+	printf '[Error] not found pdf "%s"\n' "${1}" >&2
 	return 1
 }
 
@@ -74,9 +74,9 @@ check_chapters_xml_exists()
 check_book_pdf_is_a_pdf_file()
 {
 	# description
-	#	it checks if book pdf is a valid pdf
+	#	it checks if pdf is a valid pdf
 	# arguments
-	#	${1}:str, book pdf absolute or relative path
+	#	${1}:str, pdf absolute or relative path
 	# globals
 	#	none
 	# preconditions
@@ -99,7 +99,7 @@ generate_config_xml()
 	# description
 	#	it generates config xml
 	# arguments
-	#	${1}:str, book pdf absolute path
+	#	${1}:str, pdf absolute path
 	#	${2}:str, chapters xml absolute path
 	# globals
 	#	CONFIG_XML
@@ -250,7 +250,7 @@ main()
 	# description
 	# 	entry point
 	# arguments
-	#	${1}:str, book pdf relative or absolute path
+	#	${1}:str, pdf relative or absolute path
 	#	${2}:str, chapters xml relative or absolute path
 	# globals
 	#	none
@@ -259,9 +259,9 @@ main()
 	# returns
 	#	0, if ok
 	#	11, if arguments length is not two
-	#	13, if book pdf does not exist
+	#	13, if pdf does not exist
 	#	17, if chapters xml does not exist
-	#	19, if book pdf is not a pdf file
+	#	19, if pdf is not a pdf file
 	#	23, if config xml is not well formed (see config.xsd)
 
 	check_args_length_is_two "${#}" || return 11
