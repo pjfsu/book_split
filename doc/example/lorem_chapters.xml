@@ -1,9 +1,3 @@
-<chapter from="1" to="1" name="first page"/>
-<chapter from="2" to="2" name="second page"/>
-<chapter from="3" to="3" name="third page"/>
-<chapter from="1" to="2" name="pages from 1 to 2"/>
-<chapter from="2" to="3" name="pages from 2 to 3"/>
-<chapter from="1" to="3" name="all pages"/>
-<chapter from="2" to="1" name="invalid 1"/>
-<chapter from="1" to="11" name="invalid 2"/>
-<chapter from="7" to="11" name="invalid 3"/>
+<chapter from="1" to="2" name="Chapter 1"/>
+<chapter from="3" to="8" name="Chapter 2"/>
+<chapter from="9" to="16" name="Chapter 3"/>
