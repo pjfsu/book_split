@@ -1,0 +1,56 @@
+BEGIN
+
+// Set error codes
+SET error_code_1
+SET error_code_2
+SET error_code_3
+
+// Set error messages
+SET error_message_1
+SET error_message_2
+SET error_message_3
+
+// Validate input length
+IF script inputs length is not valid THEN
+	PRINT error_message_1
+	EXIT WITH error_code_1
+END IF
+
+// Initialize PDF and CSV files
+SET pdf TO the pdf file to be split
+SET csv TO the csv file containing ranges
+
+// Get total number of pages in the PDF to be split
+SET pdf_total_pages TO pdf
+
+// Validate existence of PDF and CSV files
+IF pdf is not found OR csv is not found THEN
+	PRINT error_message_2
+	EXIT WITH error_code_2
+END IF
+
+// Validate PDF file
+IF pdf is not a valid pdf file THEN
+	PRINT error_message_3
+	EXIT WITH error_code_3
+END IF
+
+// Process each row in the CSV file
+FOR EACH row IN csv DO
+	SET first_column TO row[1]
+	SET second_column TO row[2]
+	SET third_column TO row[3]
+
+	// Validate row data
+	IF first_column > 0 AND
+	second_column > 0 AND
+	third_column != "" AND
+	first_column <= second_column AND
+	second_column <= pdf_total_pages THEN
+
+		// Split PDF based on the validated row
+		split pdf FROM first_column TO second_column, name the new file third_column
+	END IF
+END FOR
+
+END

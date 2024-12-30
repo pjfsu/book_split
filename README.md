@@ -1,85 +1,74 @@
-# split_book
+# split_pdf
 
-## A Bash script to split a PDF book into chapters based on a CSV file. 
+## A Bash script to split a PDF based on the ranges provided in a CSV file . 
 
 ## Index
 
 * [Motivation](#motivation)
 * [Overview](#overview)
 * [Example](#example)
-* [Chapter Ranges CSV](#chapter-ranges-csv)
-* [Flowchart](#flowchart)
+* [Ranges CSV](#ranges-csv)
 * [Exit Codes](#exit-codes)
 * [Dependencies](#dependencies)
 * [License](#license)
 
 ## Motivation
 
-Splitting a book (PDF file) into chapters can be time-consuming if the book is large (e.g., 100 MB) and internet speeds are slow. This script allows you to split a PDF book into chapters offline, saving time and bandwidth.
+Splitting a PDF file can be time-consuming if the PDF file is large (e.g., 100 MB) and the internet speeds are slow. This script allows you to split a PDF offline, saving time and bandwidth.
 
 ## Overview
 
 |Name|Description|
 |---|---|
-|doc/|Contains a flowchart diagram and an example (see [_Example_](#example) section)|
+|doc/|Contains the pseudocode and an example|
 |LICENSE|The GNU General Public License Version 3|
 |README\.md|This file|
-|split_book\.sh|Entry point script|
-|test/|Contains a script to test all exit codes (see [_Exit Codes_](#exit-codes) section)|
+|split_pdf\.sh|Entry point script|
+|test/|Contains a script to test all exit codes|
 
 ## Example
 
 ```console
-user@debian:~/Documents/programs/split_book$ uname -snrmo
-Linux debian 6.1.0-28-amd64 x86_64 GNU/Linux
-user@debian:~/Documents/programs/split_book$ ls
-doc  LICENSE  README.md  split_book.sh  test
-user@debian:~/Documents/programs/split_book$ cd doc/
-user@debian:~/Documents/programs/split_book/doc$ ls
-example  flowchart
-user@debian:~/Documents/programs/split_book/doc$ cd example/
-user@debian:~/Documents/programs/split_book/doc/example$ ls
-book.ms  book.pdf  chapters.csv
-user@debian:~/Documents/programs/split_book/doc/example$ cat chapters.csv 
+user@debian:~/Documents/programs/split_pdf$ ls
+doc  LICENSE  README.md  split_pdf.sh  test
+user@debian:~/Documents/programs/split_pdf$ cd doc/
+user@debian:~/Documents/programs/split_pdf/doc$ ls
+example  pseudocode.txt
+user@debian:~/Documents/programs/split_pdf/doc$ cd example/
+user@debian:~/Documents/programs/split_pdf/doc/example$ ls
+lorem.ms  lorem.pdf  ranges.csv
+user@debian:~/Documents/programs/split_pdf/doc/example$ cat ranges.csv 
 1,2,Chapter 1
 3,8,Chapter 2
 9,16,Chapter 3
-user@debian:~/Documents/programs/split_book/doc/example$ bash ../../split_book.sh book.pdf chapters.csv 
-user@debian:~/Documents/programs/split_book/doc/example$ ls
-book  book.ms  book.pdf  chapters.csv
-user@debian:~/Documents/programs/split_book/doc/example$ ls book
+user@debian:~/Documents/programs/split_pdf/doc/example$ bash ../../split_pdf.sh lorem.pdf ranges.csv 
+user@debian:~/Documents/programs/split_pdf/doc/example$ ls
+lorem  lorem.ms  lorem.pdf  ranges.csv
+user@debian:~/Documents/programs/split_pdf/doc/example$ ls lorem
 'Chapter 1.pdf'  'Chapter 2.pdf'  'Chapter 3.pdf'
 ```
 
-__NOTE:__ You can set the execution permission using `chmod u+x split_book.sh` and update the PATH with `export PATH=$PATH:<SCRIPT_PATH>`.
+__NOTE:__ You can set the execution permission using `chmod u+x split_pdf.sh` and update the PATH with `export PATH=$PATH:<SCRIPT_PATH>`.
 
 ## Chapter Ranges CSV
 
-The CSV file containing the chapter ranges has the columns `FROM,TO,NAME` where:
+The CSV file containing the ranges has the columns `FROM,TO,NAME` where:
 - The first column is a positive integer representing the starting page number.
 - The second column is a positive integer representing the ending page number.
-- The third column is a non-empty string representing the chapter name.
+- The third column is a non-empty string representing the new PDF file name.
 
-__NOTE:__ If a row matches the criteria and has more than three columns, the remaining columns are considered as part of the chapter name.
-
-## Flowchart
-
-The pipeline of the script can be shown with the next flowchart:
-
-![flowchar.png](./doc/flowchart/flowchart.png "Flowchart")
+__NOTE:__ If a row matches the criteria and has more than three columns, the remaining columns are considered as part of the new PDF file name.
 
 ## Exit Codes
 
 |Code|Meaning|
 |---|---|
-|0|Everything was successful|
-|11|Script was not launched with two parameters|
-|13|Book PDF or chapter ranges CSV files was not found|
-|17|Book PDF file was not a valid PDF file|
+|0|OK|
+|11|The script was not launched with two inputs|
+|13|The PDF file or the CSV file was not found|
+|17|The PDF file to be split was not a valid PDF file|
 
 ## Dependencies
-
-This project uses a number of commands to work properly:
 
 |Name|Description|Version|Installation|
 |---|---|---|---|

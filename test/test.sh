@@ -1,79 +1,35 @@
-# split_book.sh exit codes tests
+#!/bin/bash
 
-fail_because_args_length_is_not_two()
-{
-	local -ri EXPECTED_EXIT=11
-
-	printf '[TEST] failing because arguments length is not two ...\n'
-	bash split_book.sh
-	[ ${EXPECTED_EXIT} -eq ${?} ] \
-		&& return 0
-
-	return 1
+test_inputs_length_not_valid() {
+	local -ri expected_exit=11
+	printf "[TEST] testing parameters length is not valid...\n"
+	bash split_pdf.sh
+	[ ${expected_exit} -eq ${?} ] || exit 1
 }
 
-fail_because_book_not_exist()
-{
-	local -ri EXPECTED_EXIT=13
-
-	printf '[TEST] failing because book not exist ...\n'
-	bash split_book.sh "" "example/lorem_chapters.xml"
-	[ ${EXPECTED_EXIT} -eq ${?} ] \
-		&& return 0
-
-	return 1
+test_input_not_found() {
+	local -ri expected_exit=13
+	printf "[TEST] testing PDF file doesn't exist ...\n"
+	bash split_pdf.sh "" "doc/example/ranges.csv"
+	printf "[TEST] testing CSV files doesn't exist ...\n"
+	bash split_pdf.sh "doc/example/book.pdf" ""
+	[ ${expected_exit} -eq ${?} ] || exit 1
 }
 
-fail_because_chapters_not_exist()
-{
-	local -ri EXPECTED_EXIT=17
-
-	printf '[TEST] failing because chapters not exist ...\n'
-	bash split_book.sh "example/lorem_book.pdf" ""
-	[ ${EXPECTED_EXIT} -eq ${?} ] \
-		&& return 0
-
-	return 1
+test_pdf_is_not_valid() {
+	local -ri expected_exit=17
+	printf "[TEST] testing PDF file is not valid ...\n"
+	# sed 's/trailer/%%trailer/' valid.pdf > invalid.pdf
+	bash split_pdf.sh "test/invalid.pdf" "doc/example/ranges.csv"
+	[ ${expected_exit} -eq ${?} ] || exit 1
 }
 
-fail_because_book_is_not_valid()
-{
-	local -ri EXPECTED_EXIT=19
-
-	printf '[TEST] failing because book is not valid ...\n'
-	# sed 's/trailer/%%trailer/' example/lorem_book.pdf > test/invalid_book.pdf
-	bash split_book.sh "test/invalid_book.pdf" "example/lorem_chapters.xml"
-	[ ${EXPECTED_EXIT} -eq ${?} ] \
-		&& return 0
-
-	return 1
-}
-
-fail_because_chapters_is_not_valid()
-{
-	local -ri EXPECTED_EXIT=23
-	
-	for xml in test/*.xml
-	do
-		printf '[TEST] failing because chapters "%s" is not valid ...\n' "${xml}"
-		bash split_book.sh "example/lorem_book.pdf" "${xml}" > /dev/null
-		[ ${EXPECTED_EXIT} -ne ${?} ] \
-			&& return 1
-		cat /tmp/split_book.error.log
-	done
-
-	return 0
-}
-
-main()
-{
+main() {
 	pushd ..
-	fail_because_args_length_is_not_two \
-	&& fail_because_book_not_exist \
-	&& fail_because_chapters_not_exist \
-	&& fail_because_book_is_not_valid \
-	&& fail_because_chapters_is_not_valid \
-		&& printf "[TEST] everything has failed as expected =D\n"
+	test_inputs_length_not_valid
+	test_input_not_found
+	test_pdf_is_not_valid
+	printf "[INFO] Everything has failed as expected =D\n"
 	popd
 }
 
