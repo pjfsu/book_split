@@ -1,164 +1,152 @@
 #!/bin/bash
+# split_book.sh - A script to split PDF books into chapters based on a CSV file. 
+# author - Pedro Sánchez Uscamaita
+# year - 2024
+# repository - github.com/pjfsu/split_book
 
-# Source configuration
-source "$(dirname "$(realpath "$0")")/config.sh"
+# This program is free software: you can redistribute it and/or modify 
+# it under the terms of the GNU General Public License as published by 
+# the Free Software Foundation, either version 3 of the License, or 
+# (at your option) any later version. 
+# This program is distributed in the hope that it will be useful, 
+# but WITHOUT ANY WARRANTY; without even the implied warranty of 
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the 
+# GNU General Public License for more details. 
+# You should have received a copy of the GNU General Public License # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-# Main functions
-main() {
-	# description
-	#	entry point
-	# globals
-	# 	none
-	# arguments
-	#	$1, the book to split
-	trap cleanup EXIT
-	guard "$@"
-	split "$1"
-}
+# Globals
+readonly INPUTS_LEN=2
+readonly INPUTS_LEN_NOT_VALID_ERR_CODE=11
+readonly INPUT_NOT_FOUND_ERR_CODE=13
+readonly PDF_NOT_VALID_ERR_CODE=17
+readonly INPUTS_LEN_NOT_VALID_ERR_MSG="usage: \"./split_book.sh pdf csv\""
+readonly INPUT_NOT_FOUND_ERR_MSG="input not found" 
+readonly PDF_NOT_VALID_ERR_MSG="pdf not valid" 
 
-guard() {
-	# description
-	#	check everything is OK before splitting
-	# globals
+# Validators
+validate_inputs() {
+	# Description
+	#	Validates the inputs parameters provided by the user. 
+	#	It ensures the correct number of parameters is provided,
+	#	checks if the provided files exist, and
+	#	verifies if the PDF file is valid.
+	# Globals
 	#	none
-	# arguments
-	#	$1, the book to split
-	#	$2, the xml with <chapter> tags
-	check_args_length_is_valid $#
-	check_book_pdf_exists "$1"
-	check_chapters_xml_exists "$2"
-	check_book_pdf_is_valid "$1"
-	check_book_info_xml_is_valid "$1" "$2"
+	# Parameters
+	#	$1 - The PDF file to be split.
+	validate_input_len $#
+	validate_inputs_exist "$@"
+	validate_pdf "$1"
 }
 
-split() {
-	# description
-	#	split the book into chapters
-	# globals
-	#	none
-	# arguments
-	#	$1, the book to split
-	generate_chapters_csv
-	local -r out_dir="${1%.pdf}" # removes the ".pdf" extension
-	[ ! -d "${out_dir}" ] && mkdir -p "${out_dir}"
-	while IFS=, read -r from to name; do
-		pdftk "$1" cat ${from}-${to} output "${out_dir}/${name}.pdf"
-	done < "${CHAPS_CSV}"
+validate_input_len() {
+	# Description
+	#	Checks if the number of input parameters provided by the user is valid.
+	#	If the number of parameters is not equal to the expected length,
+	#	it triggers an error and exists the script.
+	# Globals
+	#	INPUTS_LEN - The expected number of input parameters provided by the user.
+	#	INPUTS_LEN_NOT_VALID_ERR_CODE - Error code for invalid number of inputs.
+	#	INPUTS_LEN_NOT_VALID_ERR_MSG - Error message for invalid number of inputs.
+	# Parameters
+	# 	$1 - The number of input parameters provided by the user
+	[ $1 -eq ${INPUTS_LEN} ] || err ${INPUTS_LEN_NOT_VALID_ERR_CODE} "${INPUTS_LEN_NOT_VALID_ERR_MSG}"
 }
 
-# Checkers
-check_args_length_is_valid() {
-	# description
-	#	check if main() args length is valid
-	# globals
-	#	ARGS_LEN
-	#	ARGS_LEN_NOT_VALID_ERR_CODE
-	#	ARGS_LEN_NOT_VALID_ERR_MSG
-	# arguments
-	# 	$1, main() args length
-	[ $1 -eq ${ARGS_LEN} ] || err ${ARGS_LEN_NOT_VALID_ERR_CODE} "${ARGS_LEN_NOT_VALID_ERR_MSG}"
+validate_inputs_exist() {
+	# Description
+	# 	Check if the inputs files provided by the user exist.
+	#	If any of it doesn't exist, 
+	#	it triggers an error and exits the script.
+	# Globals
+	#	INPUT_NOT_FOUND_ERR_CODE - Error code for file not found.
+	#	INPUT_NOT_FOUND_ERR_MSG - Error message for file not found.
+	# Parameters
+	# 	none	
+	for input in "$@"; do
+		[ -f "${input}" ] || err ${INPUT_NOT_FOUND_ERR_CODE} "${INPUT_NOT_FOUND_ERR_MSG}"
+	done
 }
 
-check_book_pdf_exists() {
-	# description
-	# 	check if the book to split exists
-	# globals
-	#	BOOK_PDF_NOT_FOUND_ERR_CODE
-	#	BOOK_PDF_NOT_FOUND_ERR_MSG
-	# arguments
-	# 	$1, the user book to split
-	[ -f "$1" ] || err ${BOOK_PDF_NOT_FOUND_ERR_CODE} "${BOOK_PDF_NOT_FOUND_ERR_MSG}"
-}
-
-check_chapters_xml_exists() {
-	# description
-	#	check if the xml with <chapter> tags exists
-	# globals
-	#	CHAPS_XML_NOT_FOUND_ERR_CODE
-	#	CHAPS_XML_NOT_FOUND_ERR_MSG
-	# arguments
-	#	$1, the xml with <chapter> tags 
-	[ -f "$1" ] || err ${CHAPS_XML_NOT_FOUND_ERR_CODE} "${CHAPS_XML_NOT_FOUND_ERR_MSG}"
-}
-
-check_book_pdf_is_valid() {
-	# description
-	#	check if the book to split is a valid pdf file
-	# globals
-	#	BOOK_PDF_NOT_VALID_ERR_CODE
-	#	BOOK_PDF_NOT_VALID_ERR_MSG
-	# arguments
-	#	$1, the book to split
-	pdfinfo "$1" > /dev/null || err ${BOOK_PDF_NOT_VALID_ERR_CODE} "${BOOK_PDF_NOT_VALID_ERR_MSG}"
-}
-
-check_book_info_xml_is_valid() {
-	# description
-	#	check if the generated xml (BOOK_INFO_XML) is well formed against xsd (BOOK_INFO_XSD)
-	#	for more info, see ./xml/book_info.xsd
-	# globals
-	#	BOOK_INFO_XSD
-	#	BOOK_INFO_XML
-	#	BOOK_INFO_XML_NOT_VALID_ERR_CODE
-	#	BOOK_INFO_XML_NOT_VALID_ERR_MSG
-	# arguments
-	#	$1, the book to split
-	#	$2, the xml with <chapter> tags
-	generate_book_info_xml "$1" "$2"
-	xmllint --quiet --noout --schema "${BOOK_INFO_XSD}" "${BOOK_INFO_XML}" || err ${BOOK_INFO_XML_NOT_VALID_ERR_CODE} "${BOOK_INFO_XML_NOT_VALID_ERR_MSG}"
-}
-
-# Generators
-generate_book_info_xml() {
-	# description
-	# 	generate a temporary xml (BOOK_INFO_XML) with information about the book and the chapters
-	# globals
-	#	BOOK_INFO_XML
-	# arguments
-	#	$1, the pdf to split
-	#	$2, the xml with <chapter> tags
-	local -ri book_pdf_total_pages=$(pdfinfo "$1" | grep Pages | cut -d: -f2)
-	local -r book_info_xml_template="<book pages=\"%i\"><chapters>%s</chapters></book>"
-	printf "${book_info_xml_template}\n" ${book_pdf_total_pages} "$(< "$2")" > "${BOOK_INFO_XML}"
-}
-
-generate_chapters_csv() {
-	# description
-	#	transform the temporary xml (BOOK_INFO_XML) into a temporary csv (CHAPS_CSV) using a xsl (BOOK_INFO_XSL)
-	#	for more info, see ./xml/book_info.xsl
-	# globals
-	#	CHAPS_CSV
-	#	BOOK_INFO_XSL
-	#	BOOK_INFO_XML
-	# arguments
-	#	none
-	xsltproc --output "${CHAPS_CSV}" "${BOOK_INFO_XSL}" "${BOOK_INFO_XML}"
+validate_pdf() {
+	# Description
+	#	Checks if the PDF file provided by the user is valid by using the pdfinfo command.
+	#	If the PDF file is not valid, 
+	#	it triggers an error and exits the script.
+	# Globals
+	#	PDF_NOT_VALID_ERR_CODE - Error code for invalid PDF file.
+	#	PDF_NOT_VALID_ERR_MSG - Error message for invalid PDF file.
+	# Parameters
+	#	$1 - The PDF file to validated
+	pdfinfo "$1" > /dev/null || err ${PDF_NOT_VALID_ERR_CODE} "${PDF_NOT_VALID_ERR_MSG}"
 }
 
 # Utils
-err() {
-	# description
-	#	print an error and exit the program
-	# globals
+split() {
+	# Description
+	#	Splits the PDF file into separate chapters based on the ranges specified in the CSV file.
+	#	It creates an output directory if it doesn't exist, then
+	#	iterates through the CSV file and splits the PDF file into separate PDF files, 
+	#	saving them in the output directory.
+	# Globals
 	#	none
-	# arguments
-	#	$1, the error code
-	#	$2, the error message
+	# Parameters
+	#	$1 - The PDF file to be split.
+	#	$2 - The CSV file containing the chapter ranges.
+	local -ri pages_num=$(pdfinfo "$1" | awk '/Pages:/ {print $2}')
+	local -r out_dir="${1%.pdf}" # removes the ".pdf" extension
+	[ ! -d "${out_dir}" ] && mkdir -p "${out_dir}"
+	get_chapters ${pages_num} "$2" | while IFS=, read -r from to name; do
+		pdftk "$1" cat ${from}-${to} output "${out_dir}/${name}.pdf"
+	done
+}
+
+get_chapters() {
+	# Description
+	#	Retrieves valid rows from the CSV file containing chapter ranges. 
+	#	A row is considered valid if:
+	#	i. The first column is a positive interger representing the starting page number.
+	#	ii. The second column is a positive interger representing the ending page number.
+	#	iii. The third column is a non-empty string representing the chapter name.
+	#	NOTE: If a row matches the criteria and has more than three columns, 
+	#	the remaining columns are considered as part of the chapter name.
+	# Globals
+	#	none
+	# Parameters
+	#	$1 - The total number of pages in the PDF file.
+	#	$2 - The CSV file containing the chapters ranges.
+	awk -F, -v pages_num=$1 '\
+		/^[[:space:]]*[1-9][0-9]*[[:space:]]*,[[:space:]]*[1-9][0-9]*[[:space:]]*,[[:space:]]*[^[:space:]].*$/ \
+		&& $1 <= $2 \
+		&& $2 <= pages_num \
+		{print $0}' \
+		"$2"
+}
+
+error() {
+	# Description
+	#	Prints an error message to standard error and exits the script.
+	# Globals
+	#	none
+	# Parameters
+	#	$1 - The error code.
+	#	$2 - The error message.
 	printf "[ERROR %i] %s\n" $1 "$2" >&2
 	exit $1
 }
 
-cleanup() { 
-	# description
-	#	remove temporary files after an exit signal
-	# globals
-	#	BOOK_INFO_XML
-	#	CHAPS_CSV
-	# arguments
-	#	none
-	[ -f "${BOOK_INFO_XML}" ] && rm -f "${BOOK_INFO_XML}" 
-	[ -f "${CHAPS_CSV}" ] && rm -f "${CHAPS_CSV}" 
+# Entry point
+main() {
+	# Description
+	#	Entry point of the script. It starts by validating the input parameters (PDF and CSV files),
+	#	then proceeds to split the PDF file based on the chapter ranges provided in the CSV file.
+	# Globals
+	# 	none
+	# Parameters
+	#	$1 - the PDF file to be split
+	#	$2 - the CSV file containing the chapter ranges
+	validate_inputs "$@"
+	split "$1" "$2"
 }
 
-# Entry point
 main "${@}"
