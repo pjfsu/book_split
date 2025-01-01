@@ -1,6 +1,6 @@
 # split_pdf
 
-## A Bash script to split a PDF based on the ranges provided in a CSV file . 
+## A Bash script to split a PDF based on the ranges provided in a CSV file. 
 
 ## Index
 
@@ -14,7 +14,7 @@
 
 ## Motivation
 
-Splitting a PDF file can be time-consuming if the PDF file is large (e.g., 100 MB) and the internet speeds are slow. This script allows you to split a PDF offline, saving time and bandwidth.
+Splitting a PDF file using online tools (e.g., iLovePDF) can be time-consuming if the PDF file is large (e.g., 100 MB) and the internet speeds are slow. This script allows you to split a PDF offline, saving time and bandwidth.
 
 ## Overview
 
@@ -50,23 +50,29 @@ user@debian:~/Documents/programs/split_pdf/doc/example$ ls lorem
 
 __NOTE:__ You can set the execution permission using `chmod u+x split_pdf.sh` and update the PATH with `export PATH=$PATH:<SCRIPT_PATH>`.
 
-## Chapter Ranges CSV
+## Ranges CSV
 
 The CSV file containing the ranges has the columns `FROM,TO,NAME` where:
-- The first column is a positive integer representing the starting page number.
-- The second column is a positive integer representing the ending page number.
-- The third column is a non-empty string representing the new PDF file name.
+- The first column `FROM` is a positive integer (representing the starting page number to split).
+- The second column `TO` is a positive integer (representing the ending page number to split).
+- The third column `NAME` is a non-empty string (representing the PDF file name to generate).
 
-__NOTE:__ If a row matches the criteria and has more than three columns, the remaining columns are considered as part of the new PDF file name.
+A row will be used to split the PDF file iff:
+1. `FROM` <= `TO`
+2. `TO` <= the total number of pages in the PDF file to be split
+
+__NOTE:__ If a row matches the criteria and has more than three columns, the remaining columns are considered as part of the column `NAME`.
 
 ## Exit Codes
 
 |Code|Meaning|
 |---|---|
 |0|OK|
-|11|The script was not launched with two inputs|
-|13|The PDF file or the CSV file was not found|
-|17|The PDF file to be split was not a valid PDF file|
+|11|The script was not launched with two input files|
+|13|The PDF or the CSV file was not found|
+|17|The PDF or the CSV file has no read permission|
+|19|The PDF file to be split is not a valid PDF file|
+|23|The directory of the PDF file to be split has no write permission|
 
 ## Dependencies
 
@@ -75,8 +81,9 @@ __NOTE:__ If a row matches the criteria and has more than three columns, the rem
 |pdfinfo|Portable Document Format (PDF) document information extractor|22.12.0-2|`apt install poppler-utils`
 |pdftk|A handy tool for manipulating PDF|2.02-5|`apt install pdftk`
 |awk|Pattern scanning and text processing language|1.3.4.20200120-3.1|`apt install mawk`
-|printf|Format and print data |9.1-1|`apt install coreutils`
-|mkdir|make directories|9.1-1|`apt install coreutils`
+|printf|Format and print data|9.1-1|`apt install coreutils`
+|mkdir|Make directories|9.1-1|`apt install coreutils`
+|dirname|Strip last component from file name|9.1-1|`apt install coreutils`
 
 ## License
 
