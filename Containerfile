@@ -7,8 +7,8 @@ RUN apt-get update && \
 
 WORKDIR /app
 
-COPY split_pdf.sh /app/split_pdf.sh
+COPY app.sh /app/app.sh
 
-RUN chmod +x /app/split_pdf.sh
+RUN chmod +x /app/app.sh
 
-ENTRYPOINT ["bash", "/app/split_pdf.sh", "/tmp/in.pdf", "/tmp/in.csv"]
+ENTRYPOINT ["bash", "/app/app.sh", "/tmp/in.pdf", "/tmp/in.csv"]
