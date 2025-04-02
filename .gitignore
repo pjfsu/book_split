@@ -2,3 +2,5 @@
 *~
 *.swp
 *.swo
+# Ignore lorem out dir
+./example/lorem/
