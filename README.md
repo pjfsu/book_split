@@ -1,6 +1,6 @@
 # split_pdf
 
-## A Bash script to split a PDF based on the ranges provided in a CSV file. 
+## A Bash script to locally split PDF files based on page ranges specified in a CSV file.
 
 ## Index
 
@@ -12,43 +12,68 @@
 * [Dependencies](#dependencies)
 * [License](#license)
 
-## Motivation
+### Motivation
 
-Splitting a PDF file using online tools (e.g., iLovePDF) can be time-consuming if the PDF file is large (e.g., 100 MB) and the internet speeds are slow. This script allows you to split a PDF offline, saving time and bandwidth.
+The primary motivation behind this project stems from the need to process PDF documents **locally**, prioritizing data security and confidentiality. Many online tools, such as iLovePDF, require uploading documents to external servers, which introduces potential risks of unauthorized access, data breaches, and non-compliance with security standards.
+
+This project aligns with **information classification principles**, ensuring that sensitive data remains protected at all times. By handling files locally, this solution supports the secure management of data classified as **confidential or restricted** under ISO 27001 standards, which emphasize the importance of preserving confidentiality, integrity, and availability of information.
 
 ## Overview
 
-|Name|Description|
+| Name | Description |
 |---|---|
-|doc/|Contains the pseudocode and an example|
-|LICENSE|The GNU General Public License Version 3|
-|README\.md|This file|
-|split_pdf\.sh|Entry point script|
-|test/|Contains a script to test all exit codes|
+| **app\.sh** | The script executed inside the podman container to perform the PDF splitting operation based on the provided CSV file. |
+| **Dockerfile** | Defines the podman container environment for secure and portable execution of the splitting process. |
+| **LICENSE** | The GNU General Public License Version 3. |
+| **README\.md** | This file. |
+| **split_pdf\.sh** | The entry point script that handles arguments and ensures the necessary preconditions are met before calling the `podman run` command. |
+| **test/** | Contains a single script for validating exit codes and ensuring proper functionality of the tool. |
 
 ## Example
 
 ```console
-user@debian:~/Documents/programs/split_pdf$ ls
-doc  LICENSE  README.md  split_pdf.sh  test
-user@debian:~/Documents/programs/split_pdf$ cd doc/
-user@debian:~/Documents/programs/split_pdf/doc$ ls
-example  pseudocode.txt
-user@debian:~/Documents/programs/split_pdf/doc$ cd example/
-user@debian:~/Documents/programs/split_pdf/doc/example$ ls
-lorem.ms  lorem.pdf  ranges.csv
-user@debian:~/Documents/programs/split_pdf/doc/example$ cat ranges.csv 
-1,2,Chapter 1
-3,8,Chapter 2
-9,16,Chapter 3
-user@debian:~/Documents/programs/split_pdf/doc/example$ bash ../../split_pdf.sh lorem.pdf ranges.csv 
-user@debian:~/Documents/programs/split_pdf/doc/example$ ls
-lorem  lorem.ms  lorem.pdf  ranges.csv
-user@debian:~/Documents/programs/split_pdf/doc/example$ ls lorem
-'Chapter 1.pdf'  'Chapter 2.pdf'  'Chapter 3.pdf'
-```
+user@debian:~/Downloads$ git clone https://github.com/pjfsu/split_pdf.git
+Cloning into 'split_pdf'...
+remote: Enumerating objects: 4949, done.
+remote: Counting objects: 100% (211/211), done.
+remote: Compressing objects: 100% (129/129), done.
+remote: Total 4949 (delta 103), reused 176 (delta 73), pack-reused 4738 (from 1)
+Receiving objects: 100% (4949/4949), 30.45 MiB | 8.61 MiB/s, done.
+Resolving deltas: 100% (3324/3324), done.
+user@debian:~/Downloads$ ls
+split_pdf
+user@debian:~/Downloads$ cd split_pdf/
+user@debian:~/Downloads/split_pdf$ ls
+app.sh  Dockerfile  example  LICENSE  README.md  split_pdf.sh  test
+user@debian:~/Downloads/split_pdf$ chmod u+x split_pdf.sh 
+user@debian:~/Downloads/split_pdf$ ln -s "$(realpath split_pdf.sh)" ~/.local/bin/split_pdf
+user@debian:~/Downloads/split_pdf$ cd ~/Documents/books
+user@debian:~/Documents/books$ ls effective-devops_jennifer-davis_ryn-daniels.*
+effective-devops_jennifer-davis_ryn-daniels.csv  effective-devops_jennifer-davis_ryn-daniels.pdf
+user@debian:~/Documents/books$ cat effective-devops_jennifer-davis_ryn-daniels.csv 
+33,42,Chapter 1. The Big Picture
+43,48,Chapter 2. What Is Devops?
+49,60,Chapter 3. A History of Devops
+61,74,Chapter 4. Foundational Terminology and Concepts
+75,86,Chapter 5. Devops Misconceptions and Anti-Patterns
+87,90,Chapter 6. The Four Pillars of Effective Devops
+207,222,Chapter 11. Tools: Ecosystem Overview
+223,258,Chapter 12. Tools: Accelerators of Culture
+259,264,Chapter 13. Tools: Misconceptions and Troubleshooting
+user@debian:~/Documents/books$ echo $PATH | rev | cut -d: -f1 | rev
+/home/user/.local/bin
+user@debian:~/Documents/books$ ls -l ~/.local/bin/split_pdf 
+lrwxrwxrwx 1 user user 43 Apr  6 16:24 /home/user/.local/bin/split_pdf -> /home/user/Downloads/split_pdf/split_pdf.sh
+user@debian:~/Documents/books$ split_pdf effective-devops_jennifer-davis_ryn-daniels.{pdf,csv}
+...
+user@debian:~/Documents/books$ ls effective-devops_jennifer-davis_ryn-daniels*
+effective-devops_jennifer-davis_ryn-daniels.csv  effective-devops_jennifer-davis_ryn-daniels.pdf
 
-__NOTE:__ You can set the execution permission using `chmod u+x split_pdf.sh` and update the PATH with `export PATH=$PATH:<SCRIPT_PATH>`.
+effective-devops_jennifer-davis_ryn-daniels:
+'Chapter 11. Tools: Ecosystem Overview.pdf'                  'Chapter 1. The Big Picture.pdf'      'Chapter 4. Foundational Terminology and Concepts.pdf'
+'Chapter 12. Tools: Accelerators of Culture.pdf'             'Chapter 2. What Is Devops?.pdf'      'Chapter 5. Devops Misconceptions and Anti-Patterns.pdf'
+'Chapter 13. Tools: Misconceptions and Troubleshooting.pdf'  'Chapter 3. A History of Devops.pdf'  'Chapter 6. The Four Pillars of Effective Devops.pdf'
+```
 
 ## Ranges CSV
 
@@ -78,12 +103,10 @@ __NOTE:__ If a row matches the criteria and has more than three columns, the rem
 
 |Name|Description|Version|Installation|
 |---|---|---|---|
-|pdfinfo|Portable Document Format (PDF) document information extractor|22.12.0-2|`apt install poppler-utils`
-|pdftk|A handy tool for manipulating PDF|2.02-5|`apt install pdftk`
-|awk|Pattern scanning and text processing language|1.3.4.20200120-3.1|`apt install mawk`
-|printf|Format and print data|9.1-1|`apt install coreutils`
-|mkdir|Make directories|9.1-1|`apt install coreutils`
-|dirname|Strip last component from file name|9.1-1|`apt install coreutils`
+|podman|Simple management tool for pods, containers and images|4.3|`apt install podman`
+|printf|Format and print data|9.1|`apt install coreutils`
+|mkdir|Make directories|9.1|`apt install coreutils`
+|dirname|Strip last component from file name|9.1|`apt install coreutils`
 
 ## License
 
@@ -92,6 +115,5 @@ This project is licensed under the GNU General Public License v3.0 - see the LIC
 ## EOR (End Of Repository)
 
 ### I hope this program is useful to you. Thank you very much for visiting this repository!
-### Espero que este programa te sea útil. ¡Muchas gracias por visitar este repositorio!
+### Espero que este programa te sea útil. Muchas gracias por visitar este repositorio!
 ### Espero que este programa séache de utilidade. Moitas grazas por visitar este repositorio!
-

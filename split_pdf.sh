@@ -83,7 +83,7 @@ run() {
 # entry point
 main() {
 	# guard
-	local -r REQUIRED_COMMANDS=( dirname podman mkdir )
+	local -r REQUIRED_COMMANDS=( podman printf dirname mkdir )
 	for cmd in "${REQUIRED_COMMANDS[@]}"
 	do
 		command -v "${cmd}" > /dev/null || command_not_found "${cmd}"
