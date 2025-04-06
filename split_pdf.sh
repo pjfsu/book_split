@@ -90,7 +90,7 @@ main() {
 	done
 
 	local -r ARGS_LEN=2
-	[ ${#} -eq ${ARGS_LEN} ] || args_len_not_valid ${#} ${ARGS_LEN}
+	[ ${#} -eq ${ARGS_LEN} ] || args_len_not_valid ${ARGS_LEN} ${#}
 
 	local -r IN_PDF=${1}
 	local -r IN_CSV=${2}

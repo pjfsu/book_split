@@ -8,8 +8,8 @@
 * [Overview](#overview)
 * [Example](#example)
 * [Ranges CSV](#ranges-csv)
-* [Exit Codes](#exit-codes)
 * [Dependencies](#dependencies)
+* [Exit Codes](#exit-codes)
 * [License](#license)
 
 ## Motivation

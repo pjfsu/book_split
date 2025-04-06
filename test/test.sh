@@ -1,69 +1,142 @@
 #!/bin/bash
 
-# NOTE: this script uses relative paths.
-# Change your directory (cd) to this script directory, 
-# other case, it won't work.
+test_dependencies_not_found() {
+	local -r THIS_TEST_NAME="${FUNCNAME[0]}"
+	local -ri EXPECTED_EXIT=11
 
-readonly SPLIT_PDF="../split_pdf.sh"
-readonly EMPTY=""
-readonly PDF="../doc/example/lorem.pdf"
-readonly CSV="../doc/example/ranges.csv"
-readonly INVALID_PDF="invalid.pdf"
+	testing "${THIS_TEST_NAME}" ${EXPECTED_EXIT}
+	(
+		# corrupt PATH to simulate missing dependencies
+		PATH=""
+		"${SPLIT_PDF}" "${PDF}" "${CSV}"
+		[ ${EXPECTED_EXIT} -eq ${?} ] || fail "${THIS_TEST_NAME}"
+	)
 
-test_inputs_length_not_valid() {
-	local -ri expected_exit=11
-	printf "[TEST] testing unexpected input files length ...\n"
-	bash "${SPLIT_PDF}"
-	[ ${expected_exit} -eq ${?} ] || exit 1
+	[ ${?} -eq 0 ] && pass "${THIS_TEST_NAME}"
 }
 
-test_file_not_found() {
-	local -ri expected_exit=13
-	printf "[TEST] testing PDF file to be split doesn't exist ...\n"
+test_inputs_length_not_valid() {
+	local -r THIS_TEST_NAME="${FUNCNAME[0]}"
+	local -ri EXPECTED_EXIT=13
+
+	# test with no inputs
+	testing "${THIS_TEST_NAME}" ${EXPECTED_EXIT}
+	bash "${SPLIT_PDF}"
+	[ ${EXPECTED_EXIT} -eq ${?} ] || fail "${THIS_TEST_NAME}"
+
+	# test with only the PDF provided
+	testing "${THIS_TEST_NAME}" ${EXPECTED_EXIT}
+	bash "${SPLIT_PDF}" "${PDF}"
+	[ ${EXPECTED_EXIT} -eq ${?} ] || fail "${THIS_TEST_NAME}"
+
+	# test with only the CSV provided
+	testing "${THIS_TEST_NAME}" ${EXPECTED_EXIT}
+	bash "${SPLIT_PDF}" "${CSV}"
+	[ ${EXPECTED_EXIT} -eq ${?} ] || fail "${THIS_TEST_NAME}"
+
+	pass "${THIS_TEST_NAME}"
+}
+
+test_file_not_found_or_empty() {
+	local -r THIS_TEST_NAME="${FUNCNAME[0]}"
+	local -r EMPTY=""
+	local -ri EXPECTED_EXIT=17
+
+	testing "${THIS_TEST_NAME}" ${EXPECTED_EXIT}
 	bash "${SPLIT_PDF}" "${EMPTY}" "${CSV}"
-	[ ${expected_exit} -eq ${?} ] || exit 1
-	printf "[TEST] testing CSV file with ranges doesn't exist ...\n"
+	[ ${EXPECTED_EXIT} -eq ${?} ] || fail "${THIS_TEST_NAME}"
+
+	testing "${THIS_TEST_NAME}" ${EXPECTED_EXIT}
 	bash "${SPLIT_PDF}" "${PDF}" "${EMPTY}"
-	[ ${expected_exit} -eq ${?} ] || exit 1
+	[ ${EXPECTED_EXIT} -eq ${?} ] || fail "${THIS_TEST_NAME}"
+
+	pass "${THIS_TEST_NAME}"
 }
 
 test_read_permission_not_found() {
-	local -ri expected_exit=17
-	printf "[TEST] testing PDF file to be split has no read permission ...\n"
+	local -r THIS_TEST_NAME="${FUNCNAME[0]}"
+	local -ri EXPECTED_EXIT=19
+
+	testing "${THIS_TEST_NAME}" ${EXPECTED_EXIT}
 	chmod u-r "${PDF}"
 	bash "${SPLIT_PDF}" "${PDF}" "${CSV}"
-	[ ${expected_exit} -eq ${?} ] || exit 1
+	[ ${EXPECTED_EXIT} -eq ${?} ] || fail "${THIS_TEST_NAME}"
 	chmod u+r "${PDF}"
-	printf "[TEST] testing CSV file with ranges has no read permission ...\n"
+
+	testing "${THIS_TEST_NAME}" ${EXPECTED_EXIT}
 	chmod u-r "${CSV}"
 	bash "${SPLIT_PDF}" "${PDF}" "${CSV}"
-	[ ${expected_exit} -eq ${?} ] || exit 1
+	[ ${EXPECTED_EXIT} -eq ${?} ] || fail "${THIS_TEST_NAME}"
 	chmod u+r "${CSV}"
-}
 
-test_pdf_not_valid() {
-	local -ri expected_exit=19
-	printf "[TEST] testing PDF file to be split is not valid ...\n"
-	# sed 's/trailer/%%trailer/' valid.pdf > invalid.pdf
-	bash "${SPLIT_PDF}" "${INVALID_PDF}" "${CSV}"
-	[ ${expected_exit} -eq ${?} ] || exit 1
+	pass "${THIS_TEST_NAME}"
 }
 
 test_write_permission_not_found() {
-	local -ri expected_exit=23
-	printf "[TEST] testing PDF file to be split directory has no write permission ...\n"
+	local -r THIS_TEST_NAME="${FUNCNAME[0]}"
+	local -ri EXPECTED_EXIT=23
+
+	testing "${THIS_TEST_NAME}" ${EXPECTED_EXIT}
 	chmod u-w "$(dirname "${PDF}")"
-	bash "${SPLIT_PDF}"  "${PDF}" "${CSV}"
-	[ ${expected_exit} -eq ${?} ] || exit 1
+	bash "${SPLIT_PDF}" "${PDF}" "${CSV}"
+	[ ${EXPECTED_EXIT} -eq ${?} ] || fail "${THIS_TEST_NAME}"
 	chmod u+w "$(dirname "${PDF}")"
+
+	pass "${THIS_TEST_NAME}"
+}
+
+test_pdf_not_valid() {
+	local -r THIS_TEST_NAME="${FUNCNAME[0]}"
+	local -ri EXPECTED_EXIT=29
+	local -r INVALID_PDF="invalid.pdf"
+
+	testing "${THIS_TEST_NAME}" ${EXPECTED_EXIT}
+	# sed 's/trailer/%%trailer/' valid.pdf > invalid.pdf
+	bash "${SPLIT_PDF}" "${INVALID_PDF}" "${CSV}"
+	[ ${EXPECTED_EXIT} -eq ${?} ] || fail "${THIS_TEST_NAME}"
+
+	pass "${THIS_TEST_NAME}"
+}
+
+testing() {
+	local -r TEST_NAME="${1}"
+	local -ri EXPECTED_EXIT=${2}
+	printf "[TEST] ${TEST_NAME} - Stating (Expected Exit Code: ${EXPECTED_EXIT}) ...\n"
+}
+
+pass() {
+	local -r TEST_NAME="${1}"
+	printf "[PASS] ${TEST_NAME}\n\n"
+}
+
+fail() {
+	local -r TEST_NAME="${1}"
+	printf "[FAIL] ${TEST_NAME}\n"
+	exit 1
+}
+
+error() {
+	local -r FILE="${1}"
+	printf "[ERROR] Test file not found. Ensure file ${FILE} exists.\n"
+	exit 1
 }
 
 main() {
+	local -r SPLIT_PDF="../split_pdf.sh"
+	local -r PDF="valid.pdf"
+	local -r CSV="valid.csv"
+
+	[ -f "${SPLIT_PDF}" ] || error "${PDF}"
+	[ -f "${PDF}" ] || error "${PDF}"
+	[ -f "${CSV}" ] || error "${CSV}"
+
+	test_dependencies_not_found
 	test_inputs_length_not_valid
-	test_file_not_found
+	test_file_not_found_or_empty
 	test_read_permission_not_found
-	test_pdf_not_valid
 	test_write_permission_not_found
+	test_pdf_not_valid
+
 	printf "[INFO] Everything has failed as expected =D\n"
 }
 
