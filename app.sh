@@ -60,7 +60,7 @@ debug() {
 	echo -e "from_page\t${from_page}"
 	echo -e "to_page\t\t${to_page}"
 	echo -e "IN_PDF_PAGES\t${IN_PDF_PAGES}"
-	echo -e "out_pdf\t${out_pdf}"
+	echo -e "out_pdf\t\t${out_pdf}"
 	ls "${OUT_DIR}"
 }
 
