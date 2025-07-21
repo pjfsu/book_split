@@ -2,7 +2,7 @@ name: split_pdf
 on:
   push:
     branches:
-      - builder
+      - build
 jobs:
   podman:
     runs-on: ubuntu-latest
