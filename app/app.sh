@@ -2,10 +2,10 @@
 set -o errexit -o nounset -o pipefail -o errtrace #-o xtrace
 IFS=$'\n\t'
 
-DUMP_DATA="$(pdftk ${BOOK} dump_data)"
-BOOK_PAGES=$( echo "${DUMP_DATA}" | grep "Pages:" | awk '{print $2}' )
-CHAPTERS_ROWS="$( grep "${CHAPTER_RE}" "${CHAPTERS}" )"
-INVALID_CHAPTERS="$( grep -nv "${CHAPTER_RE}" "${CHAPTERS}" )"
+readonly DUMP_DATA="$(pdftk ${BOOK} dump_data)"
+readonly BOOK_PAGES=$( echo "${DUMP_DATA}" | grep "Pages:" | awk '{print $2}' )
+readonly CHAPTERS_ROWS="$( grep "${CHAPTER_RE}" "${CHAPTERS}" )"
+readonly INVALID_CHAPTERS="$( grep -nv "${CHAPTER_RE}" "${CHAPTERS}" )"
 
 # a chapter is valid iff:
 # 	i. it matchs with 'int,int,str' (see CHAPTER_RE env)

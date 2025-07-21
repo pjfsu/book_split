@@ -2,7 +2,7 @@ name: split_pdf
 on:
   push:
     branches:
-      - main
+      - builder
 jobs:
   podman:
     runs-on: ubuntu-latest
@@ -20,9 +20,21 @@ jobs:
         with:
           username: ${{ vars.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
+      # 1) Build and push the pdftk base image
       -
-        name: Build and push
+        name: Build and push pdftk
         uses: docker/build-push-action@v6
         with:
+          context: .
+          file: pdftk/Containerfile
           push: true
-          tags: docker.io/${{ vars.DOCKER_USERNAME }}/${{ github.event.repository.name }}:${{ steps.meta.outputs.tags }}
+          tags: docker.io/${{ vars.DOCKER_USERNAME }}/pdftk:1.0.0
+      # 2) Build and push the book_split app image
+      -
+        name: Build and push book_split
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: app/Containerfile
+          push: true
+          tags: docker.io/${{ vars.DOCKER_USERNAME }}/book_split:latest
