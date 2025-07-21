@@ -1,0 +1,31 @@
+FROM localhost/pdftk:1.0.0
+
+LABEL maintainer="pedrosanchezuscamaita@gmail.com"
+LABEL description="App for splitting a book (uses pdftk)"
+
+RUN useradd \
+	--system \
+	--no-create-home \
+	--home-dir /dev/null \
+	--shell /usr/sbin/nologin \
+	appuser \
+	&& mkdir -p "/app/in" "/app/out" \
+	&& chown -R appuser:appuser "/app"
+
+USER appuser
+
+WORKDIR /app
+
+COPY --chown=appuser:appuser app.sh .
+
+VOLUME ["/app/in", "/app/out"]
+
+ENV IN_DIR="/app/in" \
+	OUT_DIR="/app/out" \
+	BOOK="/app/in/book.pdf" \
+	CHAPTERS="/app/in/chapters.csv" \
+	POS_INT_RE="[[:space:]]*[1-9][0-9]*[[:space:]]*" \
+	NON_EMPTY_STR_RE="[[:space:]]*[^[:space:]].*"
+ENV CHAPTER_RE="^${POS_INT_RE},${POS_INT_RE},${NON_EMPTY_STR_RE}$"
+
+ENTRYPOINT ["bash", "app.sh"]
