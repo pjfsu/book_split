@@ -25,7 +25,7 @@ jobs:
         name: Build and push pdftk
         uses: docker/build-push-action@v6
         with:
-          context: .
+          context: pdftk
           file: pdftk/Containerfile
           push: true
           tags: docker.io/${{ vars.DOCKER_USERNAME }}/pdftk:1.0.0
@@ -34,7 +34,7 @@ jobs:
         name: Build and push book_split
         uses: docker/build-push-action@v6
         with:
-          context: .
+          context: app
           file: app/Containerfile
           push: true
           tags: docker.io/${{ vars.DOCKER_USERNAME }}/book_split:latest
