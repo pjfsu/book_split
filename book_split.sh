@@ -36,7 +36,6 @@ APP_IMAGE="localhost/book_split:1.3.3"
 podman run --rm \
 	--userns=keep-id \
 	--user $(id -u):$(id -g) \
-	#-v "${APP_SCRIPT}:/app/app.sh:ro,Z" \
 	-v "${BOOK}:/app/in/book.pdf:ro,Z" \
 	-v "${CHAPTERS}:/app/in/chapters.csv:ro,Z" \
 	-v "${OUT_DIR}:/app/out:Z" \
