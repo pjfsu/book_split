@@ -1,4 +1,4 @@
-name: split_pdf
+name: build_push_book_split_app_image
 on:
   push:
     branches:
