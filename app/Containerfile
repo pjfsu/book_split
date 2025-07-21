@@ -1,4 +1,4 @@
-FROM localhost/pdftk:1.0.0
+FROM docker.io/pjfsu/pdftk:1.0.0
 
 LABEL maintainer="pedrosanchezuscamaita@gmail.com"
 LABEL description="App for splitting a book (uses pdftk)"
