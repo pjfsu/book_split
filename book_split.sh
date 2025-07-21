@@ -6,7 +6,6 @@ readonly BOOK="$(realpath "${1}")"
 readonly CHAPTERS="$(realpath "${2}")"
 readonly OUT_DIR="${BOOK%.*}"
 
-#readonly APP_IMAGE="localhost/book_split:1.3.3"
 readonly APP_IMAGE="docker.io/pjfsu/book_split:latest"
 
 [ ! -d "${OUT_DIR}" ] && mkdir -p "${OUT_DIR}"
