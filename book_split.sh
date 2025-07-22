@@ -2,21 +2,26 @@
 set -o errexit -o nounset -o pipefail -o errtrace #-o xtrace
 IFS=$'\n\t'
 
-readonly BOOK="$(realpath "${1}")"
-readonly CHAPTERS="$(realpath "${2}")"
-readonly OUT_DIR="${BOOK%.*}"
+readonly HOST_BOOK="$(realpath "${1}")"
+readonly HOST_CHAPTERS="$(realpath "${2}")"
+readonly HOST_OUT="${HOST_BOOK%.*}" # removes the extension if exists
 
-readonly APP_IMAGE="docker.io/pjfsu/book_split:latest"
+readonly APP_IN="/app/in"
+readonly APP_OUT="/app/out"
+readonly APP_BOOK="${APP_IN}/book.pdf"
+readonly APP_CHAPTERS="${APP_IN}/chapters.csv"
 
-[ ! -d "${OUT_DIR}" ] && mkdir -p "${OUT_DIR}"
+! [ -d "${HOST_OUT}" ] && mkdir -p "${HOST_OUT}"
+chmod u+w "${HOST_OUT}"
 
 podman run --rm \
 	--userns=keep-id \
 	--user $(id -u):$(id -g) \
-	-v "${BOOK}:/app/in/book.pdf:ro,Z" \
-	-v "${CHAPTERS}:/app/in/chapters.csv:ro,Z" \
-	-v "${OUT_DIR}:/app/out:Z" \
-	"${APP_IMAGE}"
+	-v "../app/app.sh:/app/app.sh:Z" \
+	-v "${HOST_BOOK}:${APP_BOOK}:ro,Z" \
+	-v "${HOST_CHAPTERS}:${APP_CHAPTERS}:ro,Z" \
+	-v "${HOST_OUT}:${APP_OUT}:Z" \
+	docker.io/pjfsu/book_split:latest
 
 # thanks for using this program!
 # grazas por usar este programa!
