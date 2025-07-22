@@ -3,7 +3,7 @@
 IFS=$'\n\t'
 
 echo "Validating book" 
-if ! pdftk "${BOOK_PDF}" output /dev/null; then
+if ! pdftk "${BOOK_PDF}" output /dev/null 2>/dev/null; then
 	echo "error."
 	exit 1
 fi
@@ -20,7 +20,6 @@ while IFS=, read -r from to chapter; do
 	trim_chapter="$(sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' <<< "${chapter}")"
 	if ! [ ${trim_from} -le ${trim_to} -a ${trim_to} -le ${BOOK_PAGES} ]; then
 		echo "invalid, remember: 1st col <= 2nd col <= book pages"
-		echo "done."
 		continue
 	fi
 	echo "done."
