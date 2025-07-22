@@ -3,9 +3,6 @@
 *.swp
 *.swo
 
-# Ignore PDF files:
-*.pdf
-
 # Ignore CSV files:
 *.csv
 
