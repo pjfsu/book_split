@@ -8,7 +8,7 @@ A command-line tool that splits a PDF book into individual chapter PDFs based on
 - [Installation](#installation)  
 - [Usage](#usage)  
 - [Example](#example)  
-- [Chapters CSV Format](#chapters-csv-format)  
+- [Chapters CSV Columns](#chapters-csv-columns)  
 - [Contributing](#contributing)  
 - [License](#license)  
 
@@ -82,7 +82,7 @@ $HOME/Documents/books
     └── Chapter 2 – Deep Dive, Deep Understand.pdf
 ```
 
-## Chapters CSV Format
+## Chapters CSV Columns
 
 ```
 start_page,end_page,chapter_name
@@ -91,7 +91,7 @@ start_page,end_page,chapter_name
 |Column|Type|Description|
 |---|---|---|
 |`start_page`|positive int|First page of the chapter|
-|`end_page`|positive int|Last page of the chapter (≥ start\_page, ≤ total pages)|
+|`end_page`|positive int|Last page of the chapter (≥ start\_page, ≤ total pages of the book)|
 |`chapter_name`|non-empty string|Chapter title, if commas appear, all extra columns join it|
 
 _Rows failing validation are reported but skipped._
@@ -107,11 +107,12 @@ Contributions and bug reports are welcome:
 
 ## License
 
-This project is licensed under the GPLv3 License.  
-See [LICENSE](LICENSE) for full details.
+This project is licensed under the GPLv3 License. See [LICENSE](LICENSE) for full details.
 
 ## EOR (End Of Repository)
 
-### I hope this program is useful to you. Thank you very much for visiting this repository!
-### Espero que este programa te sea útil. Muchas gracias por visitar este repositorio!
-### Espero que este programa séache de utilidade. Moitas grazas por visitar este repositorio!
+> I hope this program is useful to you. Thank you very much for visiting this repository!
+>
+> Espero que este programa te sea útil. Muchas gracias por visitar este repositorio!
+>
+> Espero que este programa séache de utilidade. Moitas grazas por visitar este repositorio!
