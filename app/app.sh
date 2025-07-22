@@ -2,24 +2,17 @@
 #set -o errexit -o nounset -o pipefail -o errtrace -o xtrace
 IFS=$'\n\t'
 
-echo "Validating book and chapters permissions ..."
-if ! [ -r "${BOOK}" -a -r "${CHAPTERS}" ]; then
+echo "Validating book" 
+if ! pdftk "${BOOK_PDF}" output /dev/null; then
 	echo "error."
 	exit 1
 fi
 echo "done."
 
-echo "Validating book ..."
-if ! pdftk "${BOOK}" output /dev/null; then
-	echo "error."
-	exit 1
-fi
-echo "done."
+readonly BOOK_PAGES=$(pdftk "${BOOK_PDF}" dump_data | grep "Pages:" | awk '{print $2}')
 
-readonly BOOK_PAGES=$(pdftk "${BOOK}" dump_data | grep "Pages:" | awk '{print $2}')
-
-echo "Validating chapters that match --> int,int,str"
-grep "${CHAPTER_RE}" "${CHAPTERS}" | \
+echo "Validating chapters that match --> pos_int,pos_int,non_empty_str"
+grep "${CHAPTER_RE}" "${CHAPTERS_CSV}" | \
 while IFS=, read -r from to chapter; do
 	echo "Validating --> ${from},${to},${chapter}"
 	trim_from="$(tr -d '[:space:]' <<< "${from}")"
@@ -31,14 +24,14 @@ while IFS=, read -r from to chapter; do
 		continue
 	fi
 	echo "Generating --> ${trim_chapter}.pdf"
-	pdftk "${BOOK}" \
+	pdftk "${BOOK_PDF}" \
 		cat "${trim_from}-${trim_to}" \
 		output "${OUT_DIR}/${trim_chapter}.pdf"
 	echo "done."
 done
 
-echo "Chapters that didn't match --> int,int,str"
-grep -nv "${CHAPTER_RE}" "${CHAPTERS}" | sed -E -n 's/^([0-9]+):/line \1 --> /p'
+echo "Chapters that didn't match --> pos_int,pos_int,non_empty_str"
+grep -nv "${CHAPTER_RE}" "${CHAPTERS_CSV}" | sed -E -n 's/^([0-9]+):/line \1 --> /p'
 
 # thanks for using this program!
 # grazas por usar este programa!
