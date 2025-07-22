@@ -5,7 +5,7 @@ IFS=$'\n\t'
 
 readonly EXPECTED_ARGS=2
 echo "Validating arguments length"
-if ! [ ${#} -ne ${EXPECTED_ARGS} ]; then
+if [ ${#} -ne ${EXPECTED_ARGS} ]; then
 	echo "error. Usage: book_split PDF CSV"
 	exit 1
 fi

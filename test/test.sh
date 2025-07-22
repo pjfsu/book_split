@@ -7,6 +7,10 @@ readonly PDF="valid.pdf"
 readonly CSV="valid.csv"
 
 echo PREPARING ...
+[ -f book_split.sh ] && rm book_split.sh
+[ -L book_split ] && rm book_split
+[ -d valid ] && rm -rf valid
+[ -d invalid ] && rm -rf invalid
 chmod 400 $INVALID_PDF
 chmod 400 $EMPTY_CSV
 chmod 400 $PDF

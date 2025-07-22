@@ -23,6 +23,7 @@ while IFS=, read -r from to chapter; do
 		echo "done."
 		continue
 	fi
+	echo "done."
 	echo "Generating --> ${trim_chapter}.pdf"
 	pdftk "${BOOK_PDF}" \
 		cat "${trim_from}-${trim_to}" \
