@@ -1,0 +1,36 @@
+1,2,Chapter 1
+3,8,Chapter 2
+9,16,Chapter 3
+
+	1,1,first col with left tab
+    1,1,first col with left spaces
+
+1	,1,first col with right tab
+1 ,1,first col with rigth space
+
+1,	1,second col with left tab
+1, 1,second col with left space
+
+1,1	,second col with right tab
+1,1 ,second col with rigth spaces
+
+1,1,	third col with left tab
+1,1, third col with left space
+
+1,1,third col with rigth tab	
+1,1,third col with left space 
+
+1,1,'
+1,1,''
+1,1,"
+1,1,""
+1,1,,
+1,1,,,
+
+0,1,first col is zero or lower
+1,0,second col is zero or lower
+2,1,first col is greater than second col
+1,999,second col is greater than book pages
+1,1,
+1,1,          
+1,1,		
