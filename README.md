@@ -112,5 +112,7 @@ This project is licensed under the GPLv3 License. See [LICENSE](LICENSE) for ful
 ## EOR (End Of Repository)
 
 _I hope this program is useful to you. Thank you very much for visiting this repository!_
+
 _Espero que este programa te sea útil. Muchas gracias por visitar este repositorio!_
+
 _Espero que este programa séache de utilidade. Moitas grazas por visitar este repositorio!_
