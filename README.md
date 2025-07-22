@@ -94,7 +94,7 @@ start_page,end_page,chapter_name
 |`end_page`|positive int|Last page of the chapter (≥ start\_page, ≤ total pages of the book)|
 |`chapter_name`|non-empty string|Chapter title, if commas appear, all extra columns join it|
 
-_Rows failing validation are reported but skipped._
+> Rows failing validation are reported but skipped.
 
 ## Contributing
 
@@ -111,8 +111,6 @@ This project is licensed under the GPLv3 License. See [LICENSE](LICENSE) for ful
 
 ## EOR (End Of Repository)
 
-> I hope this program is useful to you. Thank you very much for visiting this repository!
->
-> Espero que este programa te sea útil. Muchas gracias por visitar este repositorio!
->
-> Espero que este programa séache de utilidade. Moitas grazas por visitar este repositorio!
+_I hope this program is useful to you. Thank you very much for visiting this repository!_
+_Espero que este programa te sea útil. Muchas gracias por visitar este repositorio!_
+_Espero que este programa séache de utilidade. Moitas grazas por visitar este repositorio!_
