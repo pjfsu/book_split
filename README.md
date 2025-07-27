@@ -45,7 +45,7 @@ ln -s "$(realpath split-pdf-bookmarks.sh)" ~/.local/bin/split-pdf-bookmarks
 podman run -d -p 8080:8080 docker.io/pjfsu/split-pdf-bookmarks:latest
 ```
 
-> You can use another host port (container host is 8080)
+> You can use another host port (container port is 8080)
 
 ### 2. Export bookmarks
 
