@@ -24,7 +24,7 @@ jobs:
         name: Build and push split-pdf-bookmarks
         uses: docker/build-push-action@v6
         with:
-          context: app
+          context: .
           file: podman/Containerfile
           push: true
           tags: docker.io/${{ vars.DOCKER_USERNAME }}/split-pdf-bookmarks:latest
