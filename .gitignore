@@ -8,3 +8,6 @@
 
 # Ignore CSV files:
 *.csv
+
+# Ignore roff files:
+*.ms
