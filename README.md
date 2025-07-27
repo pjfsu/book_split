@@ -67,7 +67,7 @@ bookmarks_level_3.csv
 bookmarks.zip
 ```
 
-### 4. Edit CSV to select chapters
+### 4. Edit CSV to select bookmarks
 
 Set `"split"` to `"y"` for the entries you want to extract:
 
@@ -82,7 +82,7 @@ vim "Effective DevOps"/bookmarks_level_1.csv
 "n","Chapter 20. Further Resources",387,392
 ```
 
-### 5. Split into chapters
+### 5. Split 
 
 ```bash
 split-pdf-bookmarks "Effective DevOps.pdf" "Effective DevOps/bookmarks_level_1.csv"
@@ -91,7 +91,7 @@ ls -1 "Effective DevOps"/*zip
 'Effective DevOps/pdfs.zip'
 ```
 
-### 6. Unzip chapters
+### 6. Unzip
 
 ```bash
 unzip "Effective DevOps"/pdfs.zip -d "Effective DevOps"
