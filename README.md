@@ -45,31 +45,48 @@ ln -s "$(realpath split-pdf-bookmarks.sh)" ~/.local/bin/split-pdf-bookmarks
 podman run -d -p 8080:8080 docker.io/pjfsu/split-pdf-bookmarks:latest
 ```
 
+> You can use another host port (container host is 8080)
+
 ### 2. Export bookmarks
 
 ```bash
 split-pdf-bookmarks "Effective DevOps.pdf"
-# Output saved to ./Effective DevOps/bookmarks.zip
-# Contents: bookmarks_level_0.csv, bookmarks_level_1.csv, ...
 ```
 
-### 3. Edit CSV to select chapters
+### 3. Unzip bookmarks
+
+```bash
+unzip "Effective DevOps"/bookmarks.zip -d "Effective DevOps"/
+```
+
+### 4. Edit CSV to select chapters
 
 Set `"split"` to `"y"` for the entries you want to extract:
 
 ```csv
+vim "Effective DevOps"/bookmarks_level_1.csv
 "split","name","from","to"
+"n","Introducing Effective Devops",22,22
+...
 "y","Chapter 1. The Big Picture",33,42
 "y","Chapter 2. What Is Devops?",43,48
 ...
+"n","Chapter 20. Further Resources",387,392
 ```
 
-### 4. Split into chapters
+### 5. Split into chapters
 
 ```bash
 split-pdf-bookmarks "Effective DevOps.pdf" "Effective DevOps/bookmarks_level_1.csv"
-# Output saved to ./Effective DevOps/pdfs.zip
-# Extracts: Chapter 1.pdf, Chapter 2.pdf, ...
+```
+
+### 6. Unzip chapters
+
+```bash
+unzip "Effective DevOps"/pdfs.zip -d "Effective DevOps"
+ls -1 "Effective DevOps"/Chapter*
+'Effective DevOps/Chapter 1. The Big Picture.pdf'
+'Effective DevOps/Chapter 2. What Is Devops.pdf'
 ```
 
 ## API Reference
@@ -86,8 +103,8 @@ split-pdf-bookmarks "Effective DevOps.pdf" "Effective DevOps/bookmarks_level_1.c
 split,name,from,to
 ```
 
-- `split`: `"y"` means the row will be used
-- `name`: filename for the chapter
+- `split`: `"y"`/`"n"` means the row will/won't be used
+- `name`: filename for the generated PDF
 - `from`, `to`: start/end page (inclusive)
 
 ## Bash Client
@@ -100,7 +117,7 @@ Use `split-pdf-bookmarks.sh` to send requests locally:
 
 Usage:
 ```bash
-./split-pdf-bookmarks.sh book.pdf              # Export bookmarks
+./split-pdf-bookmarks.sh book.pdf               # Export bookmarks
 ./split-pdf-bookmarks.sh book.pdf bookmarks.csv # Split PDF
 ```
 
@@ -111,4 +128,3 @@ GPLv3 License. See [LICENSE](./LICENSE) for terms.
 ## Future Ideas
 
 - Web UI front-end for preview and interaction
-
