@@ -10,7 +10,7 @@ set -euo pipefail
 IFS=$'\n\t'
 
 readonly SCRIPT_NAME=$(basename "$0")
-readonly IMAGE="localhost/split-pdf-bookmarks"
+readonly IMAGE="docker.io/pjfsu/split-pdf-bookmarks:latest"
 readonly CONTAINER_PORT=8080
 
 # Helper Functions
