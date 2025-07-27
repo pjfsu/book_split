@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 name: build_push_book_split_app_image
+=======
+name: split-pdf-bookmarks
+>>>>>>> dev
 on:
   push:
     branches:
@@ -20,6 +24,7 @@ jobs:
         with:
           username: ${{ vars.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
+<<<<<<< HEAD
       # 1) Build and push the pdftk base image if exists
       - 
         name: Check if pdftk:1.0.0 exists
@@ -42,9 +47,13 @@ jobs:
       # 2) Build and push the book_split app image
       -
         name: Build and push book_split
+=======
+      -
+        name: Build and push split-pdf-bookmarks
+>>>>>>> dev
         uses: docker/build-push-action@v6
         with:
           context: app
-          file: app/Containerfile
+          file: podman/Containerfile
           push: true
-          tags: docker.io/${{ vars.DOCKER_USERNAME }}/book_split:latest
+          tags: docker.io/${{ vars.DOCKER_USERNAME }}/split-pdf-bookmarks:latest
