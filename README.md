@@ -57,6 +57,12 @@ split-pdf-bookmarks "Effective DevOps.pdf"
 
 ```bash
 unzip "Effective DevOps"/bookmarks.zip -d "Effective DevOps"/
+ls -1 "Effective DevOps"/
+bookmarks_level_0.csv
+bookmarks_level_1.csv
+bookmarks_level_2.csv
+bookmarks_level_3.csv
+bookmarks.zip
 ```
 
 ### 4. Edit CSV to select chapters
