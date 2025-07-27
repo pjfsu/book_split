@@ -128,3 +128,11 @@ GPLv3 License. See [LICENSE](./LICENSE) for terms.
 ## Future Ideas
 
 - Web UI front-end for preview and interaction
+
+## EOR (End Of Repository)
+
+> I hope this program is useful to you. Thank you very much for visiting this repository!
+>
+> Espero que este programa te sea útil. Muchas gracias por visitar este repositorio!
+>
+> Espero que este programa séache de utilidade. Moitas grazas por visitar este repositorio!
