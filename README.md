@@ -51,6 +51,8 @@ podman run -d -p 8080:8080 docker.io/pjfsu/split-pdf-bookmarks:latest
 
 ```bash
 split-pdf-bookmarks "Effective DevOps.pdf"
+ls -1 "Effective DevOps"/
+bookmarks.zip
 ```
 
 ### 3. Unzip bookmarks
@@ -84,6 +86,9 @@ vim "Effective DevOps"/bookmarks_level_1.csv
 
 ```bash
 split-pdf-bookmarks "Effective DevOps.pdf" "Effective DevOps/bookmarks_level_1.csv"
+ls -1 "Effective DevOps"/*zip
+'Effective DevOps/bookmarks.zip'
+'Effective DevOps/pdfs.zip'
 ```
 
 ### 6. Unzip chapters
