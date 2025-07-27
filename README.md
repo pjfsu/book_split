@@ -1,6 +1,6 @@
 # split-pdf-bookmarks
 
-Extract bookmarks from PDFs and split documents into chapters using a companion CSV—served as a FastAPI web service and shipped as a Podman/Docker container.
+Extract bookmarks from PDFs and split documents using a companion CSV—served as a FastAPI web service and shipped as a Podman container.
 
 ## Features
 
@@ -82,7 +82,7 @@ vim "Effective DevOps"/bookmarks_level_1.csv
 "n","Chapter 20. Further Resources",387,392
 ```
 
-### 5. Split 
+### 5. Split bookmarks
 
 ```bash
 split-pdf-bookmarks "Effective DevOps.pdf" "Effective DevOps/bookmarks_level_1.csv"
@@ -91,7 +91,7 @@ ls -1 "Effective DevOps"/*zip
 'Effective DevOps/pdfs.zip'
 ```
 
-### 6. Unzip
+### 6. Unzip PDFs
 
 ```bash
 unzip "Effective DevOps"/pdfs.zip -d "Effective DevOps"
