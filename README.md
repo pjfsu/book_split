@@ -33,10 +33,16 @@ split-pdf-bookmarks/
 
 ## Example Workflow
 
+### 0. Create a symlink
+
+```bash
+ln -s "$(realpath split-pdf-bookmarks.sh)" ~/.local/bin/split-pdf-bookmarks
+```
+
 ### 1. Start the container
 
 ```bash
-podman run -d -p <FREE_PORT>:8080 docker.io/pjfsu/split-pdf-bookmarks:latest
+podman run -d -p 8080:8080 docker.io/pjfsu/split-pdf-bookmarks:latest
 ```
 
 ### 2. Export bookmarks
@@ -97,16 +103,6 @@ Usage:
 ./split-pdf-bookmarks.sh book.pdf              # Export bookmarks
 ./split-pdf-bookmarks.sh book.pdf bookmarks.csv # Split PDF
 ```
-
-## Container Build (GitHub Actions)
-
-This project uses GitHub CI to:
-
-- Build & tag container image (`podman/Containerfile`)
-- Push to Docker Hub (`pjfsu/split-pdf-bookmarks:latest`)
-- Triggered on `build` branch push
-
-See `.github/workflows/build_push.yml` for details.
 
 ## License
 
