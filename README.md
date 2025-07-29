@@ -158,7 +158,6 @@ podman build -t split-pdf-bookmarks-tests -f ./podman/tests/Containerfile .
 podman run -d --rm --network testnet -p 8080:8080 --name split-pdf-bookmarks docker.io/pjfsu/split-pdf-bookmarks:latest
 podman run --rm --network testnet -e API_URL=http://split-pdf-bookmarks:8080 split-pdf-bookmarks-tests:latest
 ```
-> TODO: tests workflow
 
 ## License
 
