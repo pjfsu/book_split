@@ -47,7 +47,7 @@ async def load_pdf_reader(pdf_file: UploadFile) -> PdfReader:
 
 def package_zip(files: Dict[str, bytes]) -> bytes:
     """
-    Package a mapping of filename→bytes into a ZIP archive.
+    Package a mapping of filename-->bytes into a ZIP archive.
     Returns the raw ZIP bytes.
     """
     buffer = BytesIO()

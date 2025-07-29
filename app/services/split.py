@@ -102,7 +102,7 @@ def _extract_fragments(
 ) -> Dict[str, bytes]:
     """
     For each instruction flagged to split, extract the page range,
-    write a new PDF in memory, and collect filename→bytes.
+    write a new PDF in memory, and collect filename-->bytes.
     """
     fragments: Dict[str, bytes] = {}
 

@@ -101,7 +101,7 @@ main() {
   log "Locating running container..."
   local cid; cid=$(find_container)
   local host_port; host_port=$(get_host_port "$cid")
-  log "Server endpoint → http://localhost:${host_port}${endpoint}"
+  log "Server endpoint --> http://localhost:${host_port}${endpoint}"
 
   # 6) Dispatch POST request
   log "Sending request..."
