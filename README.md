@@ -20,15 +20,33 @@ Extract bookmarks from PDFs and split documents using a companion CSV—served a
 
 ```
 split-pdf-bookmarks/
-├── app/                     # FastAPI application
-│   ├── main.py              # Entry point
-│   ├── routers/             # Endpoints: /api/bookmarks/zip and /api/split
-│   └── services/            # Core logic for bookmark extraction and PDF splitting
-├── podman/                  # Containerfile and entrypoint
-├── split-pdf-bookmarks.sh   # Bash client for API
-├── requirements.txt         # Python dependencies
+├── app
+│   ├── __init__.py
+│   ├── main.py
+│   ├── routers
+│   │   ├── bookmarks.py
+│   │   ├── split.py
+│   │   └── utils.py
+│   └── services
+│       ├── bookmarks.py
+│       ├── exceptions.py
+│       ├── split.py
+│       └── utils.py
 ├── LICENSE
-└── README.md
+├── podman
+│   ├── app
+│   │   ├── Containerfile
+│   │   ├── entrypoint.sh
+│   │   └── requirements.txt
+│   └── tests
+│       ├── Containerfile
+│       └── requirements.txt
+├── README.md
+├── split-pdf-bookmarks.sh
+└── tests
+    ├── conftest.py
+    ├── __init__.py
+    └── test_bookmarks_zip.py
 ```
 
 ## Example Workflow
