@@ -132,6 +132,18 @@ Usage:
 ./split-pdf-bookmarks.sh book.pdf bookmarks.csv # Split PDF
 ```
 
+## Tests
+
+```bash
+podman network create testnet
+podman build -t split-pdf-bookmarks-tests -f ./podman/tests/Containerfile .
+podman run -d --rm --network testnet -p 8080:8080 --name split-pdf-bookmarks docker.io/pjfsu/split-pdf-bookmarks:latest
+podman run --rm --network testnet -e API_URL=http://split-pdf-bookmarks:8080 split-pdf-bookmarks-tests:latest
+.....                                                                    [100%]
+5 passed, 1 warning in 0.08s
+```
+> TODO: tests workflow
+
 ## License
 
 GPLv3 License. See [LICENSE](./LICENSE) for terms.
