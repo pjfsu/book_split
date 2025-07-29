@@ -1,0 +1,50 @@
+name: tests
+
+on:
+  push:
+    branches:
+      - build
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Create test network
+        run: docker network create testnet || true
+
+      - name: Build app image
+        run: |
+          docker build \
+            -f podman/app/Containerfile \
+            -t split-pdf-bookmarks-app .
+
+      - name: Run app container
+        run: |
+          docker run -d \
+            --rm \
+            --network testnet \
+            --name app \
+            -p 8080:8080 \
+            split-pdf-bookmarks-app
+
+      - name: Build tests image
+        run: |
+          docker build \
+            -f podman/tests/Containerfile \
+            -t split-pdf-bookmarks-tests .
+
+      - name: Run tests
+        env:
+          API_URL: http://app:8080
+        run: |
+          docker run --rm \
+            --network testnet \
+            -e API_URL \
+            split-pdf-bookmarks-tests
