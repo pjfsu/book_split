@@ -159,10 +159,6 @@ podman run -d --rm --network testnet -p 8080:8080 --name split-pdf-bookmarks doc
 podman run --rm --network testnet -e API_URL=http://split-pdf-bookmarks:8080 split-pdf-bookmarks-tests:latest
 ```
 
-## Demo
-
-<video src="demo.webm" controls></video>
-
 ## License
 
 GPLv3 License. See [LICENSE](./LICENSE) for terms.
