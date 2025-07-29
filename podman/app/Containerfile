@@ -1,3 +1,4 @@
+# Stage 1: Install runtime deps
 FROM python:3-slim-bookworm AS base
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
@@ -8,15 +9,16 @@ RUN groupadd --system appuser \
 
 WORKDIR /app
 
-COPY requirements.txt .
+COPY podman/app/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Stage 2: Build final runtime image
 FROM base AS final
 
-COPY podman/entrypoint.sh /usr/local/bin/entrypoint.sh
+COPY podman/app/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
-COPY --chown=appuser:appuser app/ ./
+COPY --chown=appuser:appuser app/ .
 
 USER appuser
 

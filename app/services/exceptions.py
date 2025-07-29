@@ -8,6 +8,6 @@ class NotFoundError(ServiceError):
     """Raised when expected data (e.g. bookmarks) is missing."""
     pass
 
-class ValidationError(ServiceError):
+class ValidationError(ValueError):
     """Raised on any invalid input or state."""
     pass

@@ -10,6 +10,7 @@ from typing import Dict
 
 from fastapi import UploadFile
 from PyPDF2 import PdfReader
+from PyPDF2.errors import PdfReadError
 
 from .exceptions import ValidationError
 
@@ -37,9 +38,12 @@ async def load_pdf_reader(pdf_file: UploadFile) -> PdfReader:
     """
     data = await read_bytes(pdf_file)
     try:
-        return PdfReader(BytesIO(data))
-    except Exception as e:
-        raise ValidationError(f"Invalid PDF file: {e}")
+        reader = PdfReader(BytesIO(data))
+    except PdfReadError as exc:
+        raise ValidationError(f"Invalid PDF file: {exc}")
+    if getattr(reader, "is_encrypted", False):
+        raise ValidationError(f"PDF is password-protected")
+    return reader
 
 def package_zip(files: Dict[str, bytes]) -> bytes:
     """

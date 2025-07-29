@@ -3,6 +3,7 @@ from fastapi.responses import StreamingResponse
 
 from .utils import create_zip_response
 from services.bookmarks import build_bookmarks_zip as build_bookmarks_zip_service
+from services.exceptions import NotFoundError
 
 router = APIRouter(
     prefix="/api",
@@ -24,10 +25,9 @@ async def export_bookmarks_zip(
     """
     try:
         zip_bytes = await build_bookmarks_zip_service(pdf)
-    except FileNotFoundError:
-        raise HTTPException(status_code=404, detail="No bookmarks found in the PDF.")
+    except NotFoundError as exc:
+        raise HTTPException(status_code=404, detail=str(exc))
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc))
 
     return create_zip_response(zip_bytes, "bookmarks_by_depth.zip")
-

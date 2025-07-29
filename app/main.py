@@ -1,4 +1,3 @@
-# app/main.py
 from fastapi import FastAPI
 from routers.split import router as split_router
 from routers.bookmarks import router as bookmarks_router
