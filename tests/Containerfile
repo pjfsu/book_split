@@ -1,0 +1,7 @@
+FROM python:3-slim-bookworm
+
+RUN pip install --no-cache-dir pytest requests
+
+WORKDIR /app
+
+ENTRYPOINT ["pytest"]

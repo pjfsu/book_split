@@ -1,7 +1,66 @@
-# Ignore vi/vim files:
+# vim swap files
 *~
 *.swp
 *.swo
 
-# Ignore roff files:
+# roff files
 *.ms
+
+# macOS Finder files
+.DS_Store
+
+# Python bytecode
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*$py.class
+
+# pytest cache
+.pytest_cache/
+.cache/
+
+# test artifacts
+tests/**/__pycache__/
+
+# Coverage reports
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# pip install logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# tox, nox, and other runners
+.tox/
+.nox/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+
+# IDE/editor folders
+.idea/
+.vscode/
+*.iml
+
+# Local env vars
+.env
+.env.*
+
+# Docker / Podman compose overrides and local files
+podman-compose.override.yml
+docker-compose.override.yml
+
+# Logs
+*.log
+

@@ -1,27 +1,42 @@
-version: "3.9"
-
 services:
-  api-gateway:
-    build: api-gateway
-    profiles: ["full-stack", "gateway-dev"]
+  split-service:
+    image: docker.io/hashicorp/http-echo:latest
+    command: ["-listen=:8000", "-text=split-service stub"]
+    expose:
+      - "8000"
 
   bookmarks-service:
-    build: bookmarks-service
-    profiles: ["full-stack", "bookmarks-dev"]
+    image: docker.io/hashicorp/http-echo:latest
+    command: ["-listen=:8000", "-text=bookmarks-service stub"]
+    expose:
+      - "8000"
 
-  split-service:
-    build: split-service
-    profiles: ["full-stack", "split-dev"]
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Containerfile
+    ports:
+      - "8080:80"
+    depends_on:
+      - bookmarks-service
+      - split-service
+    profiles:
+      - integration
 
-  test-runner:
-    image: python:3.11-slim
-    profiles: ["test"]
+  test:
+    build:
+      context: .
+      dockerfile: tests/Containerfile
+    profiles: 
+      - integration
     depends_on:
       - api-gateway
-    entrypoint: bash -c
-    command: |
-      pip install pytest httpx &&
-      pytest /integration
+      - bookmarks-service
+      - split-service
     volumes:
-      - ./tests/integration:/integration
-
+      - ./:/app:Z
+    working_dir: /app
+    command: 
+      - "--maxfail=1"
+      - "--disable-warnings"
+      - "tests/integration/test_api_gateway.py"
