@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+  api-gateway:
+    build: api-gateway
+    profiles: ["full-stack", "gateway-dev"]
+
+  bookmarks-service:
+    build: bookmarks-service
+    profiles: ["full-stack", "bookmarks-dev"]
+
+  split-service:
+    build: split-service
+    profiles: ["full-stack", "split-dev"]
+
+  test-runner:
+    image: python:3.11-slim
+    profiles: ["test"]
+    depends_on:
+      - api-gateway
+    entrypoint: bash -c
+    command: |
+      pip install pytest httpx &&
+      pytest /integration
+    volumes:
+      - ./tests/integration:/integration
+

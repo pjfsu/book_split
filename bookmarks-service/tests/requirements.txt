@@ -1,5 +1,0 @@
-pytest
-pytest-timeout
-
-requests
-PyPDF2
