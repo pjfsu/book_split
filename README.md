@@ -167,6 +167,13 @@ GPLv3 License. See [LICENSE](./LICENSE) for terms.
 
 - Web UI front-end for preview and interaction
 
+## Demo
+
+<video width="600" controls loop muted>
+  <source src="demo.webm" type="video/webm" />
+  Your browser does not support embedded videos.
+</video>
+
 ## EOR (End Of Repository)
 
 > I hope this program is useful to you. Thank you very much for visiting this repository!
