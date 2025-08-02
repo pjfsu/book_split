@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+
+  api-gateway:
+    image: nginx:latest
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - bookmarks-service
+      - split-service
+
+  bookmarks-service:
+    image: your-registry/bookmarks-service:latest
+    environment:
+      - PORT=8000
+    expose:
+      - "8000"
+
+  split-service:
+    image: your-registry/split-service:latest
+    environment:
+      - PORT=8001
+    expose:
+      - "8001"
